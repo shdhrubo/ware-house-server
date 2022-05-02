@@ -6,9 +6,17 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ProgrammingHeroWC4/warehouse-management-server-side-shdhrubo.git"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ProgrammingHeroWC4/warehouse-management-server-side-shdhrubo/issues"
+  },
+  "homepage": "https://github.com/ProgrammingHeroWC4/warehouse-management-server-side-shdhrubo#readme",
   "dependencies": {
     "cors": "^2.8.5",
     "dotenv": "^16.0.0",
