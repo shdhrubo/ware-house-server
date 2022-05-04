@@ -1,4 +1,4 @@
-const { MongoClient, ServerApiVersion } = require("mongodb");
+const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 
 const express = require("express");
 
@@ -22,12 +22,20 @@ async function run() {
     const inventoriesCollection = client
       .db("inventoryManagement")
       .collection("inventories");
+      //all inventories
     app.get("/inventories", async (req, res) => {
       const query = {};
       const cursor = inventoriesCollection.find(query);
       const inventories = await cursor.toArray();
       res.send(inventories);
     });
+    //one inventories
+    app.get('/inventory/:id',async(req,res)=>{
+        const id = req.params.id;
+        const query = { _id: ObjectId(id) };
+        const result = await inventoriesCollection.findOne(query);
+        res.send(result);
+    })
   } finally {
     // await client.close();
   }
