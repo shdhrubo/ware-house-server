@@ -22,7 +22,7 @@ async function run() {
     const inventoriesCollection = client
       .db("inventoryManagement")
       .collection("inventories");
-      //all inventories
+    //all inventories
     app.get("/inventories", async (req, res) => {
       const query = {};
       const cursor = inventoriesCollection.find(query);
@@ -30,12 +30,31 @@ async function run() {
       res.send(inventories);
     });
     //one inventories
-    app.get('/inventory/:id',async(req,res)=>{
-        const id = req.params.id;
-        const query = { _id: ObjectId(id) };
-        const result = await inventoriesCollection.findOne(query);
-        res.send(result);
-    })
+    app.get("/inventory/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: ObjectId(id) };
+      const result = await inventoriesCollection.findOne(query);
+      res.send(result);
+    });
+    //update quantity
+    app.put("/inventory/:id", async (req, res) => {
+      const id = req.params.id;
+      const updatedQuantity = req.body;
+      const filter = { _id: ObjectId(id) };
+      const options = { upsert: true };
+      const updatedDoc = {
+        $set: {
+          quantity: updatedQuantity.quantity,
+        },
+      };
+      const result = await inventoriesCollection.updateOne(
+        filter,
+        updatedDoc,
+        options
+      );
+      console.log(result);
+      res.send(result);
+    });
   } finally {
     // await client.close();
   }
