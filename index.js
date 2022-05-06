@@ -22,21 +22,21 @@ async function run() {
     const inventoriesCollection = client
       .db("inventoryManagement")
       .collection("inventories");
-    //all inventories
+    //get all inventories
     app.get("/inventories", async (req, res) => {
       const query = {};
       const cursor = inventoriesCollection.find(query);
       const inventories = await cursor.toArray();
       res.send(inventories);
     });
-    //one inventories
+    //get one inventories
     app.get("/inventory/:id", async (req, res) => {
       const id = req.params.id;
       const query = { _id: ObjectId(id) };
       const result = await inventoriesCollection.findOne(query);
       res.send(result);
     });
-    //update quantity
+    //update one quantity
     app.put("/inventory/:id", async (req, res) => {
       const id = req.params.id;
       const updatedQuantity = req.body;
@@ -52,7 +52,20 @@ async function run() {
         updatedDoc,
         options
       );
-      console.log(result);
+
+      res.send(result);
+    });
+    app.delete("/inventory/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: ObjectId(id) };
+      const result = await inventoriesCollection.deleteOne(query);
+      res.send(result);
+    });
+    //add inventory
+    app.post("/inventories", async (req, res) => {
+      const addInventories = req.body;
+      console.log("adding new inventory", addInventories);
+      const result = await inventoriesCollection.insertOne(addInventories);
       res.send(result);
     });
   } finally {
