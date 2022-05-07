@@ -24,11 +24,19 @@ async function run() {
       .collection("inventories");
     //get all inventories
     app.get("/inventories", async (req, res) => {
-      const query = {};
+      let query;
+      const email = req.query.email;
+      if (email === undefined) {
+        query = {};
+      } else {
+        query = { email: email };
+      }
+
       const cursor = inventoriesCollection.find(query);
       const inventories = await cursor.toArray();
       res.send(inventories);
     });
+
     //get one inventories
     app.get("/inventory/:id", async (req, res) => {
       const id = req.params.id;
