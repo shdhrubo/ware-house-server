@@ -17,14 +17,20 @@ function verifyJWT(req, res, next) {
     return res.status(401).send({ message: "unauthorized access" });
   }
   const token = authHeader.split(" ")[1];
-  jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decoded) => {
-    if (err) {
-      return res.status(403).send({ message: "Forbidden access" });
-    }
-    console.log("decoded", decoded);
+  if (token.length < 500) {
+    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decoded) => {
+      if (err) {
+        return res.status(403).send({ message: "Forbidden access " });
+      }
+      req.decoded = decoded;
+      next();
+    });
+  } else {
+    const decoded = jwt.decode(token);
+
     req.decoded = decoded;
     next();
-  });
+  }
 }
 
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.baf5z.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
@@ -62,7 +68,7 @@ async function run() {
         const items = await cursor.toArray();
         res.send(items);
       } else {
-        res.status(403).send({ message: "Forbidden Access" });
+        res.status(403).send({ message: "Forbidden Access " });
       }
     });
     //get one inventories
