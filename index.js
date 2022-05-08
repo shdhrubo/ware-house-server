@@ -135,7 +135,7 @@ async function run() {
 run().catch(console.dir);
 
 app.get("/", (req, res) => {
-  res.send("connected");
+  res.send("Running EIMS");
 });
 app.listen(port, () => {
   console.log("listening to port", port);
