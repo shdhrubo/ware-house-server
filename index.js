@@ -42,6 +42,9 @@ async function run() {
     const servicesCollection = client
       .db("inventoryManagement")
       .collection("services");
+    const reviewsCollection = client
+      .db("inventoryManagement")
+      .collection("reviews");
     //get all inventories
     app.get("/inventories", async (req, res) => {
       const query = {};
@@ -118,6 +121,13 @@ async function run() {
       const cursor = servicesCollection.find(query);
       const services = await cursor.toArray();
       res.send(services);
+    });
+    //get all reviews
+    app.get("/reviews", async (req, res) => {
+      const query = {};
+      const cursor = reviewsCollection.find(query);
+      const reviews = await cursor.toArray();
+      res.send(reviews);
     });
   } finally {
   }
