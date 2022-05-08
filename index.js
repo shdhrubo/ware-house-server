@@ -39,36 +39,17 @@ async function run() {
     const inventoriesCollection = client
       .db("inventoryManagement")
       .collection("inventories");
-
+    const servicesCollection = client
+      .db("inventoryManagement")
+      .collection("services");
     //get all inventories
-    // app.get("/inventories", async (req, res) => {
-
-    //   let query;
-    //   const email = req.query.email;
-
-    //   if (email === undefined) {
-    //     query = {};
-    //   } else {
-    //     verifyJWT();
-    //   const decodedEmail = req.decoded.email;
-
-    //     if (email === decodedEmail) {
-    //       query = { email: email };
-    //     } else {
-    //       res.status(403).send({ message: "forbidden access" });
-    //     }
-    //   }
-
-    //   const cursor = inventoriesCollection.find(query);
-    //   const inventories = await cursor.toArray();
-    //   res.send(inventories);
-    // });
     app.get("/inventories", async (req, res) => {
       const query = {};
       const cursor = inventoriesCollection.find(query);
       const inventories = await cursor.toArray();
       res.send(inventories);
     });
+    //get only logged in user's inventories
     app.get("/items", verifyJWT, async (req, res) => {
       const decodedEmail = req?.decoded?.email;
       const email = req.query.email;
@@ -107,6 +88,7 @@ async function run() {
 
       res.send(result);
     });
+    //delete inventory
     app.delete("/inventory/:id", async (req, res) => {
       const id = req.params.id;
       const query = { _id: ObjectId(id) };
@@ -129,8 +111,15 @@ async function run() {
       });
       res.send({ accessToken });
     });
+
+    //get all services
+    app.get("/services", async (req, res) => {
+      const query = {};
+      const cursor = servicesCollection.find(query);
+      const services = await cursor.toArray();
+      res.send(services);
+    });
   } finally {
-    // await client.close();
   }
 }
 run().catch(console.dir);
