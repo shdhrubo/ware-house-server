@@ -9,7 +9,7 @@ require("dotenv").config();
 const port = process.env.PORT || 5000;
 
 app.use(cors()); //middleware
-app.use(express.json()); //middleware for undefined
+app.use(express.json()); //middleware undefined
 //verify token function
 function verifyJWT(req, res, next) {
   const authHeader = req.headers.authorization;
